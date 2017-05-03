@@ -1,20 +1,27 @@
-import React, { PureComponent }        from 'react';
-import PropTypes                       from 'prop-types';
-import { connect }                     from 'react-redux';
-import { Grid, Row, Col } from 'react-flexbox-grid';
-import FlatButton                      from 'material-ui/FlatButton';
-import Dialog                          from 'material-ui/Dialog';
-import TextField                          from 'material-ui/TextField';
-import Select from 'react-select';
+import React, {PureComponent} from 'react';
+import PropTypes              from 'prop-types';
+import {connect}              from 'react-redux';
+import lodashMap              from 'lodash/map';
+import FlatButton             from 'material-ui/FlatButton';
+import Dialog                 from 'material-ui/Dialog';
+import TextField              from 'material-ui/TextField';
+import Select                 from 'react-select';
 
-import { actions as addSourceActions } from '../../../../redux/add-source';
+import {SOURCE_URL_EMPTY}            from '../../../../constants/errors';
+import {actions as addSourceActions} from '../../../../redux/add-source';
 
 import 'react-select/dist/react-select.css';
 
 class AddSourceContainer extends PureComponent {
 
+    componentWillReceiveProps(nextProps) {
+        if (!this.props.isShowDialog && nextProps.isShowDialog) {
+            this.props.FETCH_TAGS();
+        }
+    }
+
     componentWillUnmount() {
-        // this.props.CLEAR();
+        this.props.CLEAR();
     }
 
     handleClose = () => {
@@ -23,15 +30,47 @@ class AddSourceContainer extends PureComponent {
     };
 
     handleChangeSourceUrl = (e) => {
-        this.props.SET_SOURCE_URL(e.target.value)
+        const {sourceUrlValidationError, SET_SOURCE_URL, SET_SOURCE_URL_VALIDATION_ERROR} = this.props;
+        SET_SOURCE_URL(e.target.value);
+        if (sourceUrlValidationError && e.target.value.length) {
+            SET_SOURCE_URL_VALIDATION_ERROR(null);
+        }
     };
 
     handleChangeTags = (e) => {
-        this.props.SET_TAGS(e);
+        this.props.SET_SELECTED_TAGS(e);
+    };
+
+    handleAddNewSource = () => {
+        if (this._validateSourceData()) return;
+
+        const {user: {uid}, selectedTags, sourceUrl, CREATE_NEW_SOURCE} = this.props;
+        const tagIds = selectedTags.map(tag => tag.value);
+        CREATE_NEW_SOURCE({
+            userId: uid,
+            tagIds,
+            sourceUrl
+        });
+    };
+
+    handleNewOptionClick = (tag) => {
+        this.props.CREATE_NEW_TAG(tag.label);
+    };
+
+    _adaptTagsForSelect = () => {
+        return lodashMap(this.props.tags, (val, key) => ({value: key, label: val}));
+    };
+
+    _validateSourceData = () => {
+        if (!this.props.sourceUrl.length) {
+            this.props.SET_SOURCE_URL_VALIDATION_ERROR(SOURCE_URL_EMPTY);
+            return true;
+        }
     };
 
     render() {
-        const {sourceUrl, tags, isShowDialog} = this.props;
+        const {sourceUrl, sourceUrlValidationError, selectedTags, isShowDialog} = this.props;
+        const adaptedTags = this._adaptTagsForSelect();
         const actions = [
             <FlatButton
                 label="Cancel"
@@ -39,43 +78,43 @@ class AddSourceContainer extends PureComponent {
                 onTouchTap={this.handleClose}
             />,
             <FlatButton
-                label="Submit"
+                label="Create new source"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onTouchTap={this.handleAddNewSource}
             />,
-        ];
-
-        var options = [
-            {value: 112345, label: 'One'},
-            {value: 345678, label: 'Two'}
         ];
 
         return (
             <Dialog
-                title="Add source"
+                title="Create source"
                 actions={actions}
-                modal={false}
+                autoScrollBodyContent={true}
                 open={isShowDialog}
                 onRequestClose={this.handleClose}
+                className="add-source-container"
             >
-                <TextField
-                    hintText="Source URL"
-                    fullWidth={true}
-                    value={sourceUrl}
-                    onChange={this.handleChangeSourceUrl}
-                />
-                <br />
-                <br />
-                <Select.Creatable
-                    name="form-field-name"
-                    promptTextCreator={(label) => `Add new tag "${label}"?`}
-                    placeholder="Add tags ..."
-                    options={options}
-                    multi={true}
-                    value={tags}
-                    onChange={this.handleChangeTags}
-                />
-                <br />
+                <div className="body-container">
+                    <br />
+                    <TextField
+                        hintText="Source URL"
+                        fullWidth={true}
+                        value={sourceUrl}
+                        errorText={sourceUrlValidationError}
+                        onChange={this.handleChangeSourceUrl}
+                    />
+                    <br />
+                    <br />
+                    <Select.Creatable
+                        name="form-field-name"
+                        promptTextCreator={(label) => `Add new tag "${label}"?`}
+                        placeholder="Add tags ..."
+                        options={adaptedTags}
+                        multi={true}
+                        value={selectedTags}
+                        onChange={this.handleChangeTags}
+                        onNewOptionClick={this.handleNewOptionClick}
+                    />
+                </div>
             </Dialog>
         );
     }
@@ -84,23 +123,36 @@ class AddSourceContainer extends PureComponent {
 AddSourceContainer.propTypes = {
     isShowDialog: PropTypes.bool,
     sourceUrl: PropTypes.string,
+    sourceUrlValidationError: PropTypes.string,
     tags: PropTypes.any,
+    selectedTags: PropTypes.any,
     TOGGLE_DIALOG: PropTypes.func.isRequired,
     SET_SOURCE_URL: PropTypes.func.isRequired,
-    SET_TAGS: PropTypes.func.isRequired,
+    SET_SOURCE_URL_VALIDATION_ERROR: PropTypes.func.isRequired,
+    FETCH_TAGS: PropTypes.func.isRequired,
+    SET_SELECTED_TAGS: PropTypes.func.isRequired,
+    CREATE_NEW_TAG: PropTypes.func.isRequired,
+    CREATE_NEW_SOURCE: PropTypes.func.isRequired,
     CLEAR: PropTypes.func.isRequired,
 };
 
 const mapStateToPros = state => ({
+    user: state.auth.user,
     isShowDialog: state.addSource.isShowDialog,
     sourceUrl: state.addSource.sourceUrl,
+    sourceUrlValidationError: state.addSource.sourceUrlValidationError,
     tags: state.addSource.tags,
+    selectedTags: state.addSource.selectedTags,
 });
 
 const mapDispatchToProps = dispatch => ({
     TOGGLE_DIALOG: (isShow) => dispatch(addSourceActions.TOGGLE_DIALOG(isShow)),
     SET_SOURCE_URL: (sourceUrl) => dispatch(addSourceActions.SET_SOURCE_URL(sourceUrl)),
-    SET_TAGS: (tags) => dispatch(addSourceActions.SET_TAGS(tags)),
+    SET_SOURCE_URL_VALIDATION_ERROR: (sourceUrlValidationError) => dispatch(addSourceActions.SET_SOURCE_URL_VALIDATION_ERROR(sourceUrlValidationError)),
+    FETCH_TAGS: () => dispatch(addSourceActions.FETCH_TAGS()),
+    SET_SELECTED_TAGS: (tags) => dispatch(addSourceActions.SET_SELECTED_TAGS(tags)),
+    CREATE_NEW_TAG: (tag) => dispatch(addSourceActions.CREATE_NEW_TAG(tag)),
+    CREATE_NEW_SOURCE: (data) => dispatch(addSourceActions.CREATE_NEW_SOURCE(data)),
     CLEAR: () => dispatch(addSourceActions.CLEAR()),
 });
 
