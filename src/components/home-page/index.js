@@ -5,6 +5,7 @@ import { connect }                 from 'react-redux';
 import { actions as appActions }   from '../../redux/app';
 
 import AppBarView from '../shared/app-bar';
+import { Grid, Row, Col } from 'react-flexbox-grid';
 
 let yeomanImage = require('../../images/yeoman.png');
 
@@ -28,6 +29,15 @@ class HomePage extends Component {
                 <If condition={ true }>
                     <span>IfBlock</span>
                 </If>
+                <Grid fluid>
+                    <Col xs={12}>
+                        <Row center="xs">
+                            <Col xs={6}>
+                                asdasdasd
+                            </Col>
+                        </Row>
+                    </Col>
+                </Grid>
             </div>
         );
     }
