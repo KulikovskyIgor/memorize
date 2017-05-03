@@ -7,9 +7,6 @@ import { actions as appActions }   from '../../redux/app';
 import AppBarView from '../shared/app-bar';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
-import AddSourceContainer from '../shared/add-source/containers/add-source-container';
-import AddSourceFloatingButton from '../shared/add-source/containers/add-source-floating-button';
-
 let yeomanImage = require('../../images/yeoman.png');
 
 class HomePage extends Component {
@@ -41,8 +38,6 @@ class HomePage extends Component {
                         </Row>
                     </Col>
                 </Grid>
-                <AddSourceContainer />
-                <AddSourceFloatingButton />
             </div>
         );
     }
