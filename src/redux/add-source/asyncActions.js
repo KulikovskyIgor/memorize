@@ -22,12 +22,13 @@ export const CREATE_NEW_TAG = (tag) => {
     }
 };
 
-export const CREATE_NEW_SOURCE = ({userId, tagIds, sourceUrl}) => {
+export const CREATE_NEW_SOURCE = ({userId, tagIds, sourceUrl, description}) => {
     return (dispatch) => {
         firebase.database().ref('sources').push({
             userId,
             tagIds,
             sourceUrl,
+            description,
             createdAt: (new Date()).toISOString()
         }).then(() => {
             dispatch(actions.CLEAR());

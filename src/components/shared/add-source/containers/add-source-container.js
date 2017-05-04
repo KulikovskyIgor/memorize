@@ -37,6 +37,10 @@ class AddSourceContainer extends PureComponent {
         }
     };
 
+    handleChangeDescription = (e) => {
+        this.props.SET_DESCRIPTION(e.target.value);
+    };
+
     handleChangeTags = (e) => {
         this.props.SET_SELECTED_TAGS(e);
     };
@@ -44,12 +48,13 @@ class AddSourceContainer extends PureComponent {
     handleAddNewSource = () => {
         if (this._validateSourceData()) return;
 
-        const {user: {uid}, selectedTags, sourceUrl, CREATE_NEW_SOURCE} = this.props;
+        const {user: {uid}, selectedTags, sourceUrl, description, CREATE_NEW_SOURCE} = this.props;
         const tagIds = selectedTags.map(tag => tag.value);
         CREATE_NEW_SOURCE({
             userId: uid,
             tagIds,
-            sourceUrl
+            sourceUrl,
+            description
         });
     };
 
@@ -69,7 +74,7 @@ class AddSourceContainer extends PureComponent {
     };
 
     render() {
-        const {sourceUrl, sourceUrlValidationError, selectedTags, isShowDialog} = this.props;
+        const {sourceUrl, description, sourceUrlValidationError, selectedTags, isShowDialog} = this.props;
         const adaptedTags = this._adaptTagsForSelect();
         const actions = [
             <FlatButton
@@ -102,6 +107,12 @@ class AddSourceContainer extends PureComponent {
                         errorText={sourceUrlValidationError}
                         onChange={this.handleChangeSourceUrl}
                     />
+                    <TextField
+                        hintText="Description"
+                        fullWidth={true}
+                        value={description}
+                        onChange={this.handleChangeDescription}
+                    />
                     <br />
                     <br />
                     <Select.Creatable
@@ -123,6 +134,7 @@ class AddSourceContainer extends PureComponent {
 AddSourceContainer.propTypes = {
     isShowDialog: PropTypes.bool,
     sourceUrl: PropTypes.string,
+    description: PropTypes.string,
     sourceUrlValidationError: PropTypes.string,
     tags: PropTypes.any,
     selectedTags: PropTypes.any,
@@ -140,6 +152,7 @@ const mapStateToPros = state => ({
     user: state.auth.user,
     isShowDialog: state.addSource.isShowDialog,
     sourceUrl: state.addSource.sourceUrl,
+    description: state.addSource.description,
     sourceUrlValidationError: state.addSource.sourceUrlValidationError,
     tags: state.addSource.tags,
     selectedTags: state.addSource.selectedTags,
@@ -149,6 +162,7 @@ const mapDispatchToProps = dispatch => ({
     TOGGLE_DIALOG: (isShow) => dispatch(addSourceActions.TOGGLE_DIALOG(isShow)),
     SET_SOURCE_URL: (sourceUrl) => dispatch(addSourceActions.SET_SOURCE_URL(sourceUrl)),
     SET_SOURCE_URL_VALIDATION_ERROR: (sourceUrlValidationError) => dispatch(addSourceActions.SET_SOURCE_URL_VALIDATION_ERROR(sourceUrlValidationError)),
+    SET_DESCRIPTION: (description) => dispatch(addSourceActions.SET_DESCRIPTION(description)),
     FETCH_TAGS: () => dispatch(addSourceActions.FETCH_TAGS()),
     SET_SELECTED_TAGS: (tags) => dispatch(addSourceActions.SET_SELECTED_TAGS(tags)),
     CREATE_NEW_TAG: (tag) => dispatch(addSourceActions.CREATE_NEW_TAG(tag)),
