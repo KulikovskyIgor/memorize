@@ -7,6 +7,8 @@ import { actions as appActions }   from '../../../redux/app';
 import AppBarView from '../../shared/app-bar';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
+import SourcesContainer from '../sources';
+
 let yeomanImage = require('../../../images/yeoman.png');
 
 class HomePageContainer extends Component {
@@ -23,21 +25,14 @@ class HomePageContainer extends Component {
         return (
             <div>
                 <AppBarView />
-                <img src={yeomanImage} alt="Yeoman Generator"/>
-                <div className="notice">Please edit <code>src/components/Main.js</code> to get started!</div>
-                <h1> {this.props.test} </h1>
-                <If condition={ true }>
-                    <span>IfBlock</span>
-                </If>
-                <Grid fluid>
-                    <Col xs={12}>
-                        <Row center="xs">
-                            <Col xs={6}>
-                                asdasdasd
-                            </Col>
-                        </Row>
+                <Row>
+                    <Col xs={12} md={4}>
+                        <SourcesContainer />
                     </Col>
-                </Grid>
+                    <Col xs={12} md={8}>
+                        cvbnm,
+                    </Col>
+                </Row>
             </div>
         );
     }

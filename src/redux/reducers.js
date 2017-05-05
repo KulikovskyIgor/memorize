@@ -4,6 +4,8 @@ import app                 from './app';
 import home                from './home';
 import auth                from './auth';
 import addSource           from './add-source';
+import sources             from './sources';
+import tags                from './tags';
 
 export default (state, action) => ({
     ...combineReducers({
@@ -12,5 +14,7 @@ export default (state, action) => ({
         home,
         auth,
         addSource,
+        sources,
+        tags,
     }).call(null, state, action),
 });
