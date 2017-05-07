@@ -1,9 +1,23 @@
 .source-container {
     .source-view {
-        .tag-wrapper {
-            display: inline-block;
-            .chip {
-                margin: 2px !important;
+        &.active {
+            .card {
+                &:hover {
+                    background: #80DEEA !important;
+                }
+                background: #80DEEA !important;
+            }
+        }
+        .card {
+            cursor: pointer;
+            &:hover {
+                background: #B2EBF2 !important;
+            }
+            .tag-wrapper {
+                display: inline-block;
+                .chip {
+                    margin: 2px !important;
+                }
             }
         }
     }

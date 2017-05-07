@@ -1,14 +1,15 @@
-import React, {Component}        from 'react';
-import PropTypes                   from 'prop-types';
-import {connect}                 from 'react-redux';
+import React, {Component}       from 'react';
+import PropTypes                from 'prop-types';
+import {connect}                from 'react-redux';
 
-import {actions as appActions}   from '../../../redux/app';
-import {actions as tagsActions}   from '../../../redux/tags';
+import {actions as appActions}  from '../../../redux/app';
+import {actions as tagsActions} from '../../../redux/tags';
 
-import AppBarView from '../../shared/app-bar';
-import {Grid, Row, Col} from 'react-flexbox-grid';
+import AppBarView               from '../../shared/app-bar';
+import {Grid, Row, Col}         from 'react-flexbox-grid';
 
-import SourcesContainer from '../sources';
+import SourcesContainer         from '../sources';
+import SourceFrameContainer     from '../source-frame';
 
 class HomePageContainer extends Component {
 
@@ -22,17 +23,13 @@ class HomePageContainer extends Component {
 
     render() {
         return (
-            <Grid fluid className="home-page">
+            <div className="home-page">
                 <AppBarView />
-                <Row>
-                    <Col xs={12} md={4}>
-                        <SourcesContainer />
-                    </Col>
-                    <Col xs={12} md={8}>
-                        cvbnm,
-                    </Col>
-                </Row>
-            </Grid>
+                <div className="content-container">
+                    <SourcesContainer />
+                    <SourceFrameContainer />
+                </div>
+            </div>
         );
     }
 }
@@ -42,12 +39,9 @@ HomePageContainer.propTypes = {
     CLEAR: PropTypes.func.isRequired,
 };
 
-const mapStateToPros = state => ({
-});
-
 const mapDispatchToProps = dispatch => ({
     FETCH_TAGS: data => dispatch(tagsActions.FETCH_TAGS()),
     CLEAR: () => dispatch(appActions.CLEAR()),
 });
 
-export default connect(mapStateToPros, mapDispatchToProps)(HomePageContainer);
+export default connect(null, mapDispatchToProps)(HomePageContainer);

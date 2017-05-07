@@ -19,6 +19,10 @@ class SourcesContainer extends PureComponent {
         this._manageFetchUsersMetadata(nextProps);
     }
 
+    handleClickSourceItem = (id) => {
+        this.props.SET_ACTIVE_SOURCE(id);
+    };
+
     _manageFetchSources = (nextProps) => {
         const nextUserId = nextProps.user ? nextProps.user.uid : null;
         const prevUserId = this.props.user ? this.props.user.uid : null;
@@ -37,15 +41,19 @@ class SourcesContainer extends PureComponent {
     };
 
     render() {
-        const {sources, users, tags} = this.props;
+        const {sources, activeSourceId, users, tags} = this.props;
         return (
             <div className="source-container">
-                {lodashMap(sources, (source, key) => {
-                    console.log('users[source.userId]',users, users[source.userId]);
-                    return (
-                        <SourceView key={key} {...{...source, tags, user: users[source.userId]}} />
-                    )
-                })}
+                {lodashMap(sources, (source, key) => (
+                    <SourceView key={key} {...{
+                        ...source,
+                        tags,
+                        user: users[source.userId],
+                        isActive: activeSourceId === key,
+                        onClick: this.handleClickSourceItem.bind(this, key),
+                    }}
+                    />
+                ))}
             </div>
         );
     }
@@ -53,13 +61,17 @@ class SourcesContainer extends PureComponent {
 
 SourcesContainer.propTypes = {
     sources: PropTypes.any,
+    activeSourceId: PropTypes.string,
     tags: PropTypes.object,
     user: PropTypes.object,
     FETCH_SOURCES: PropTypes.func.isRequired,
+    SET_ACTIVE_SOURCE: PropTypes.func.isRequired,
+    FETCH_USER: PropTypes.func.isRequired,
 };
 
 const mapStateToPros = state => ({
     sources: state.sources.sources,
+    activeSourceId: state.sources.activeSourceId,
     tags: state.tags.tags,
     user: state.auth.user,
     users: state.users.users,
@@ -67,6 +79,7 @@ const mapStateToPros = state => ({
 
 const mapDispatchToProps = dispatch => ({
     FETCH_SOURCES: () => dispatch(sourcesActions.FETCH_SOURCES()),
+    SET_ACTIVE_SOURCE: (id) => dispatch(sourcesActions.SET_ACTIVE_SOURCE(id)),
     FETCH_USER: (userId) => dispatch(usersActions.FETCH_USER(userId)),
 });
 

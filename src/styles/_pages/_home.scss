@@ -1,5 +1,17 @@
 .home-page {
-    //padding: 0 0.5rem !important;
-    //background: red;
-    //margin: 0.5rem;
+    .content-container {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        height: calc(100vh - 70px);
+
+        .source-container {
+            width: 400px;
+            height: 100%;
+            overflow-y: auto;
+        }
+        .source-frame-container {
+            flex: 1 1 auto;
+        }
+    }
 }

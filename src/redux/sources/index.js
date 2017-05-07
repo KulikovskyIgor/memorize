@@ -5,18 +5,24 @@ import * as asyncActions from './asyncActions';
 
 export const constants = constantsHelper('sources', [
     'SET_SOURCES',
+    'SET_ACTIVE_SOURCE',
     'CLEAR',
 ]);
 
 export const actions = { ...actionsHelper(constants), ...asyncActions };
 
 const initState = {
-    sources: null,
+    sources: {},
+    activeSourceId: null,
 };
 
 export default reducerHelper(initState, {
     [constants.SET_SOURCES]: (state, action) => {
         return {...state, sources: action.payload}
+    },
+
+    [constants.SET_ACTIVE_SOURCE]: (state, action) => {
+        return {...state, activeSourceId: action.payload}
     },
 
     [constants.CLEAR]: () => {
