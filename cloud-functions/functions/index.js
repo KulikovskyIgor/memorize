@@ -1,8 +1,17 @@
 var functions = require('firebase-functions');
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
+
+exports.handleCreatingOfNewUser = functions.auth.user().onCreate(event => {
+    const user = event.data;
+
+    admin.database()
+        .ref('users')
+        .push({
+            uid: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            email: user.email,
+        });
+});

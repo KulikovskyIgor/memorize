@@ -1,22 +1,20 @@
 import * as firebase from 'firebase';
-import {actions} from './index';
+import lodashForEach from 'lodash/forEach';
+import {actions}     from './index';
 
-export const FETCH_SOURCES = () => {
-    return (dispatch, getStore) => {
-        const user = getStore().auth.user;
-        const userId = user ? user.uid : null;
-
-        let sources = firebase.database().ref('sources');
-
-        if (userId) {
-            sources = sources
-                .orderByChild('userId')
-                .equalTo(userId);
-        }
-
-        sources
+export const FETCH_USER = (userId) => {
+    return (dispatch) => {
+        firebase.database().ref('users')
+            .orderByChild('uid')
+            .equalTo(userId)
             .on('value', (snapshot) => {
-                dispatch(actions.SET_SOURCES(snapshot.val()));
+                const data = snapshot.val();
+
+                lodashForEach(data, (user) => {
+                    dispatch(actions.ADD_USER({
+                        [user.uid]: user,
+                    }));
+                })
             });
     }
 };

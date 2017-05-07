@@ -8,8 +8,8 @@ function SourceView(props) {
     return (
         <Card className="source-view">
             <CardHeader
-                title={props.userId}
-                avatar="images/ok-128.jpg"
+                title={props.user.displayName}
+                avatar={props.user.photoURL}
             />
             <If condition={props.description}>
                 <CardText>
@@ -42,10 +42,22 @@ SourceView.propTypes = {
     description: PropTypes.string,
     createdAt: PropTypes.string,
     tags: PropTypes.object,
+    user: PropTypes.shape({
+        uid: PropTypes.string,
+        displayName: PropTypes.string,
+        photoURL: PropTypes.string,
+        email: PropTypes.string,
+    })
 };
 
 SourceView.defaultProps = {
     tagIds: [],
+    user: {
+        uid: '',
+        displayName: '',
+        photoURL: '',
+        email: '',
+    }
 };
 
 export default SourceView;
