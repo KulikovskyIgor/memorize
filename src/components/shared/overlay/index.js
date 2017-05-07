@@ -25,7 +25,7 @@ class Overlay extends PureComponent {
 }
 
 Overlay.propTypes = {
-    user: PropTypes.object.isRequired,
+    user: PropTypes.object,
 };
 
 const mapStateToPros = state => ({

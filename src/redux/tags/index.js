@@ -11,7 +11,7 @@ export const constants = constantsHelper('tags', [
 export const actions = { ...actionsHelper(constants), ...asyncActions };
 
 const initState = {
-    tags: [],
+    tags: {},
 };
 
 export default reducerHelper(initState, {

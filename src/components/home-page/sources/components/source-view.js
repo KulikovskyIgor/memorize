@@ -1,31 +1,12 @@
-import React            from 'react';
-import PropTypes        from 'prop-types';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import Chip from 'material-ui/Chip';
-
-const style = {
-    maxWidth: '100px',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    display: 'inline-block',
-    marginRight: '5px',
-    height: '17px',
-    lineHeight: '12px',
-    color: '#333',
-    fontSize: '.8em'
-};
-
-const styleChip = {
-    height: '20px',
-    display: 'inline-block',
-    marginRight: '3px',
-};
-
+import React                        from 'react';
+import PropTypes                    from 'prop-types';
+import {Card, CardHeader, CardText} from 'material-ui/Card';
+import Chip                         from 'material-ui/Chip';
 
 function SourceView(props) {
+
     return (
-        <Card>
+        <Card className="source-view">
             <CardHeader
                 title={props.userId}
                 avatar="images/ok-128.jpg"
@@ -38,11 +19,15 @@ function SourceView(props) {
             <If condition={props.tagIds.length}>
                 <CardText>
                     {props.tagIds.map((id) => (
-                        <Chip key={id} style={styleChip}>
-                            <span style={style}>
-                                {id}
-                            </span>
-                        </Chip>
+                        <div key={id}
+                             className="tag-wrapper"
+                        >
+                            <Chip key={id}
+                                  className="chip"
+                            >
+                                {props.tags[id]}
+                            </Chip>
+                        </div>
                     ))}
                 </CardText>
             </If>
@@ -56,6 +41,7 @@ SourceView.propTypes = {
     sourceUrl: PropTypes.string,
     description: PropTypes.string,
     createdAt: PropTypes.string,
+    tags: PropTypes.object,
 };
 
 SourceView.defaultProps = {
