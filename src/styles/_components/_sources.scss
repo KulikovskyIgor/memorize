@@ -1,24 +1,65 @@
 .source-container {
-    .source-view {
-        &.active {
-            .card {
-                &:hover {
-                    background: #80DEEA !important;
-                }
-                background: #80DEEA !important;
-            }
-        }
-        .card {
-            cursor: pointer;
-            &:hover {
-                background: #B2EBF2 !important;
-            }
-            .tag-wrapper {
-                display: inline-block;
-                .chip {
-                    margin: 2px !important;
-                }
-            }
-        }
+  .source-view {
+    padding: 3px;
+    cursor: pointer;
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+
+    &:hover {
+      background: #B2EBF2 !important;
     }
+
+    &.active {
+      &:hover {
+        background: #80DEEA !important;
+      }
+      background: #80DEEA !important;
+    }
+    .header {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      padding-left: 4px;
+
+      .avatar {
+        align-self: center;
+        width: 30px;
+        height: 30px;
+      }
+      .username {
+        flex: 3 1 auto;
+        align-self: center;
+        margin-left: 10px;
+        color: $cyan900;
+      }
+      .time {
+        flex: 1 1 auto;
+        align-self: center;
+        color: $cyan800;
+        text-align: right;
+        font-size: .8rem;
+      }
+      .actions {
+        flex: 0 1 auto;
+      }
+    }
+    .content {
+      .description-container {
+        font-size: .85rem;
+        color: #333;
+        margin: 3px;
+      }
+      .tags-container {
+        .tag-view {
+          display: inline-block;
+          font-size: .8rem;
+          padding: 3px 5px;
+          margin: 2px;
+          background: $cyan700;
+          color: #fff;
+          border-radius: 15px;
+        }
+      }
+    }
+  }
 }

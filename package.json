@@ -68,6 +68,7 @@
     "camelize": "^1.0.0",
     "classnames": "^2.2.5",
     "core-js": "^2.0.0",
+    "date-fns": "^1.28.4",
     "es6-promise": "^4.0.5",
     "firebase": "^3.9.0",
     "lodash": "^4.17.4",

@@ -1,5 +1,5 @@
 import * as firebase from 'firebase';
-import {actions} from './index';
+import { actions }   from './index';
 
 export const FETCH_SOURCES = () => {
     return (dispatch, getStore) => {
@@ -16,7 +16,8 @@ export const FETCH_SOURCES = () => {
 
         sources
             .on('value', (snapshot) => {
-                dispatch(actions.SET_SOURCES(snapshot.val()));
+                const sources = snapshot.val();
+                if (sources) dispatch(actions.SET_SOURCES(sources));
             });
     }
 };
