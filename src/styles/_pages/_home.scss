@@ -6,11 +6,12 @@
         height: calc(100vh - 70px);
 
         .source-container {
-            width: 400px;
+            width: 500px;
             height: 100%;
             overflow-y: auto;
         }
         .source-frame-container {
+            position: relative;
             flex: 1 1 auto;
         }
     }

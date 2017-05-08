@@ -1,29 +1,59 @@
 import React, {Component} from 'react';
 import PropTypes          from 'prop-types';
 import {connect}          from 'react-redux';
+import Loader             from 'react-loader';
+import IFrameView         from '../components/iframe-view';
 
-import {Grid, Row, Col}         from 'react-flexbox-grid';
+const loaderOptions = {
+    length: 20,
+    width: 10,
+    radius: 20,
+    corners: 1,
+    rotate: 0,
+    direction: 1,
+    color: '#006064',
+};
 
 class SourceFrameContainer extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isIFrameLoading: false,
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.activeSourceId !== this.props.activeSourceId) {
+            this.setState({isIFrameLoading: true});
+        }
+    }
+
+    handleLoadIFrame = () => {
+        this.setState({isIFrameLoading: false});
+    };
+
     render() {
         const {sources, activeSourceId} = this.props;
+        const {isIFrameLoading} = this.state;
         const activeSource = sources[activeSourceId];
 
         return (
             <div className="source-frame-container">
-                { activeSource ?
-                    <iframe
-                        src={activeSource.sourceUrl}
-                        width="100%"
-                        height="100%"
-                        frameBorder="0"
+                <Loader options={loaderOptions}
+                        loaded={!isIFrameLoading}
+                />
+                <If condition={activeSource}>
+                    <IFrameView url={activeSource.sourceUrl}
+                                onLoad={this.handleLoadIFrame}
                     />
-                    :
-                    <div>
+                </If>
+                <If condition={!activeSource}>
+                    <div className="choose-source">
                         choose source
                     </div>
-                }
+                </If>
             </div>
         );
     }
