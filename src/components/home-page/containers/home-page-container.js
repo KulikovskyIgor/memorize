@@ -1,13 +1,11 @@
 import React, {Component}       from 'react';
 import PropTypes                from 'prop-types';
 import {connect}                from 'react-redux';
-
 import {actions as appActions}  from '../../../redux/app';
 import {actions as tagsActions} from '../../../redux/tags';
-
+import {desktop}                from '../../../constants/responsive';
 import AppBarView               from '../../shared/app-bar';
-import {Grid, Row, Col}         from 'react-flexbox-grid';
-
+import MediaQuery               from 'react-responsive';
 import SourcesContainer         from '../sources';
 import SourceFrameContainer     from '../source-frame';
 
@@ -26,7 +24,9 @@ class HomePageContainer extends Component {
             <div className="home-page">
                 <AppBarView />
                 <div className="content-container">
-                    <SourcesContainer />
+                    <MediaQuery minDeviceWidth={desktop}>
+                        <SourcesContainer />
+                    </MediaQuery>
                     <SourceFrameContainer />
                 </div>
             </div>
