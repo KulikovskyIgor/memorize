@@ -1,9 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes                from 'prop-types';
-import { connect }              from 'react-redux';
+import {connect}              from 'react-redux';
 
 import AddSourceContainer       from '../add-source/containers/add-source-container';
 import AddSourceFloatingButton  from '../add-source/containers/add-source-floating-button';
+import MobileNavigation  from '../mobile-navigation';
 
 class Overlay extends PureComponent {
 
@@ -14,6 +15,7 @@ class Overlay extends PureComponent {
                     <When condition={this.props.user}>
                         <AddSourceContainer />
                         <AddSourceFloatingButton />
+                        <MobileNavigation />
                     </When>
                     <Otherwise>
 
