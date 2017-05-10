@@ -51,6 +51,10 @@ class SourcesContainer extends Component {
         });
     };
 
+    handleDeleteSource = (id) => {
+        this.props.DELETE_SOURCE(id);
+    };
+
     render() {
         const {sources, activeSourceId, users, tags, isLoggedUser} = this.props;
 
@@ -66,6 +70,7 @@ class SourcesContainer extends Component {
                         isActive: activeSourceId === key,
                         onClick: this.handleClickSourceItem,
                         onEdit: this.handleEditSource,
+                        onDelete: this.handleDeleteSource,
                     }}
                     />
                 ))}
@@ -96,6 +101,7 @@ const mapStateToPros = state => ({
 
 const mapDispatchToProps = dispatch => ({
     FETCH_SOURCES: () => dispatch(sourcesActions.FETCH_SOURCES()),
+    DELETE_SOURCE: (id) => dispatch(sourcesActions.DELETE_SOURCE(id)),
     SET_ACTIVE_SOURCE: (id) => dispatch(sourcesActions.SET_ACTIVE_SOURCE(id)),
     FETCH_USER: (userId) => dispatch(usersActions.FETCH_USER(userId)),
     TOGGLE_DIALOG_EDIT_MODE: (payload) => dispatch(addSourceActions.TOGGLE_DIALOG_EDIT_MODE(payload)),

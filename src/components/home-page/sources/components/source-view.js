@@ -40,6 +40,11 @@ class SourceView extends PureComponent {
         this.props.onEdit(this.props.id);
     };
 
+    handleDeleteSource = () => {
+        this.setState({isOptionsPopoverOpened: false});
+        this.props.onDelete(this.props.id);
+    };
+
     render() {
         const {
             id,
@@ -51,7 +56,6 @@ class SourceView extends PureComponent {
             tagIds,
             createdAt,
             onClick,
-            onDelete,
         } = this.props;
         const {isOptionsPopoverOpened, popoverAnchorEl} = this.state;
         const formattedDate = datefnsFormat(createdAt, 'YYYY-MM-DD');
@@ -91,7 +95,7 @@ class SourceView extends PureComponent {
                                 isOpen={isOptionsPopoverOpened}
                                 anchorEl={popoverAnchorEl}
                                 onEdit={this.handleEditSource}
-                                onDelete={onDelete}
+                                onDelete={this.handleDeleteSource}
                                 onCloseRequest={this.handleClosePopover}
                             />
                         </If>

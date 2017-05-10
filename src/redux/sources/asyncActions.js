@@ -21,3 +21,10 @@ export const FETCH_SOURCES = () => {
             });
     }
 };
+
+export const DELETE_SOURCE = (id) => {
+    console.log('aaaaa', id);
+    return () => {
+        firebase.database().ref(`sources/${id}`).remove();
+    }
+};
