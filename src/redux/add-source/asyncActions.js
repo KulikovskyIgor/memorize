@@ -5,7 +5,7 @@ export const FETCH_TAGS = () => {
     return (dispatch) => {
         firebase.database()
             .ref('tags')
-            .on('value', (snapshot) => {
+            .once('value', (snapshot) => {
                 dispatch(actions.SET_TAGS(snapshot.val()));
             });
     }
@@ -30,6 +30,20 @@ export const CREATE_NEW_SOURCE = ({userId, tagIds, sourceUrl, description}) => {
             sourceUrl,
             description,
             createdAt: (new Date()).toISOString()
+        }).then(() => {
+            dispatch(actions.CLEAR());
+        });
+    }
+};
+
+export const UPDATE_SOURCE = ({sourceId, tagIds, sourceUrl, description}) => {
+    return (dispatch) => {
+        console.log(sourceId, tagIds, sourceUrl, description);
+        firebase.database().ref(`sources/${sourceId}`).update({
+            tagIds,
+            sourceUrl,
+            description,
+            updatedAt: (new Date()).toISOString()
         }).then(() => {
             dispatch(actions.CLEAR());
         });

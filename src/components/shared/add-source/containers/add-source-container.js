@@ -58,6 +58,19 @@ class AddSourceContainer extends PureComponent {
         });
     };
 
+    handleUpdateSource = () => {
+        if (this._validateSourceData()) return;
+
+        const {sourceId, selectedTags, sourceUrl, description, UPDATE_SOURCE} = this.props;
+        const tagIds = selectedTags.map(tag => tag.value);
+        UPDATE_SOURCE({
+            sourceId,
+            tagIds,
+            sourceUrl,
+            description
+        });
+    };
+
     handleNewOptionClick = (tag) => {
         this.props.CREATE_NEW_TAG(tag.label);
     };
@@ -74,7 +87,7 @@ class AddSourceContainer extends PureComponent {
     };
 
     render() {
-        const {sourceUrl, description, sourceUrlValidationError, selectedTags, isShowDialog} = this.props;
+        const {sourceUrl, description, sourceUrlValidationError, selectedTags, isShowDialog, isEditMode} = this.props;
         const adaptedTags = this._adaptTagsForSelect();
         const actions = [
             <FlatButton
@@ -83,15 +96,15 @@ class AddSourceContainer extends PureComponent {
                 onTouchTap={this.handleClose}
             />,
             <FlatButton
-                label="Create new source"
+                label={isEditMode ? 'Update source' : 'Create new source'}
                 primary={true}
-                onTouchTap={this.handleAddNewSource}
+                onTouchTap={isEditMode ? this.handleUpdateSource : this.handleAddNewSource}
             />,
         ];
 
         return (
             <Dialog
-                title="Create source"
+                title={isEditMode ? 'Update source' : 'Create new source'}
                 actions={actions}
                 autoScrollBodyContent={true}
                 open={isShowDialog}
@@ -133,6 +146,8 @@ class AddSourceContainer extends PureComponent {
 
 AddSourceContainer.propTypes = {
     isShowDialog: PropTypes.bool,
+    isEditMode: PropTypes.bool,
+    sourceId: PropTypes.string,
     sourceUrl: PropTypes.string,
     description: PropTypes.string,
     sourceUrlValidationError: PropTypes.string,
@@ -145,12 +160,15 @@ AddSourceContainer.propTypes = {
     SET_SELECTED_TAGS: PropTypes.func.isRequired,
     CREATE_NEW_TAG: PropTypes.func.isRequired,
     CREATE_NEW_SOURCE: PropTypes.func.isRequired,
+    UPDATE_SOURCE: PropTypes.func.isRequired,
     CLEAR: PropTypes.func.isRequired,
 };
 
 const mapStateToPros = state => ({
     user: state.auth.user,
     isShowDialog: state.addSource.isShowDialog,
+    isEditMode: state.addSource.isEditMode,
+    sourceId: state.addSource.sourceId,
     sourceUrl: state.addSource.sourceUrl,
     description: state.addSource.description,
     sourceUrlValidationError: state.addSource.sourceUrlValidationError,
@@ -167,6 +185,7 @@ const mapDispatchToProps = dispatch => ({
     SET_SELECTED_TAGS: (tags) => dispatch(addSourceActions.SET_SELECTED_TAGS(tags)),
     CREATE_NEW_TAG: (tag) => dispatch(addSourceActions.CREATE_NEW_TAG(tag)),
     CREATE_NEW_SOURCE: (data) => dispatch(addSourceActions.CREATE_NEW_SOURCE(data)),
+    UPDATE_SOURCE: (data) => dispatch(addSourceActions.UPDATE_SOURCE(data)),
     CLEAR: () => dispatch(addSourceActions.CLEAR()),
 });
 

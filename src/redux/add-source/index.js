@@ -5,6 +5,8 @@ import * as asyncActions from './asyncActions';
 
 export const constants = constantsHelper('add-source', [
     'TOGGLE_DIALOG',
+    'TOGGLE_DIALOG_EDIT_MODE',
+    'SET_SOURCE_ID',
     'SET_SOURCE_URL',
     'SET_DESCRIPTION',
     'SET_SOURCE_URL_VALIDATION_ERROR',
@@ -18,6 +20,8 @@ export const actions = { ...actionsHelper(constants), ...asyncActions };
 
 const initState = {
     isShowDialog: false,
+    isEditMode: false,
+    sourceId: '',
     sourceUrl: '',
     description: '',
     sourceUrlValidationError: '',
@@ -28,6 +32,21 @@ const initState = {
 export default reducerHelper(initState, {
     [constants.TOGGLE_DIALOG]: (state, action) => {
         return {...state, isShowDialog: action.payload}
+    },
+
+    [constants.TOGGLE_DIALOG_EDIT_MODE]: (state, action) => {
+        return {...state,
+            isShowDialog: true,
+            isEditMode: true,
+            sourceId: action.payload.sourceId,
+            sourceUrl: action.payload.sourceUrl,
+            description: action.payload.description,
+            selectedTags: action.payload.selectedTags,
+        }
+    },
+
+    [constants.SET_SOURCE_ID]: (state, action) => {
+        return {...state, sourceId: action.payload}
     },
 
     [constants.SET_SOURCE_URL]: (state, action) => {
